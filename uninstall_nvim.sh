@@ -8,5 +8,5 @@ else
 fi
 
 # uninstall 
-$SUDO rm /usr/local/bin/*vim
-$SUDO rm -r /usr/local/share/*vim/
+$SUDO rm /usr/bin/vim
+$SUDO rm -r /opt/nvim
