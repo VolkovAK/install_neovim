@@ -18,12 +18,14 @@ set scrolloff=8
 set signcolumn=yes
 set updatetime=100
 
-" " tab navigation
-" inoremap <C-Up> <ESC>gT
-" nnoremap <C-Up> <ESC>gT
-" inoremap <C-Down> <ESC>gt
-" nnoremap <C-Down> <ESC>gt
-
+" ------------ Mouse support ----------------
+set mouse=a
+" -------------------------------------------
+" ------------ Clipboard support ------------
+" xclip must be installed!
+" standard yank will copy selected to clipboard
+set clipboard+=unnamedplus
+" -------------------------------------------
 
 " ------------ Copy inner word --------------
 function! CopyWord()
@@ -34,14 +36,13 @@ function! CopyWord()
     echom "Copied:" getreg('y')
 endfunction
 
-nnoremap <C-c> :call CopyWord()<CR>
+nnoremap <C-y> :call CopyWord()<CR>
 " paste this word as many times as you need
 nnoremap <C-p> viw"yp
 " -------------------------------------------
 
 " -------- Split line (opposite of J) -------
 nnoremap <S-S> Eli<CR><ESC>
-" nnoremap <S-S> i<CR><ESC>W
 " -------------------------------------------
 
 " -------- Toggle line number ---------------
@@ -57,4 +58,8 @@ function! ToggleSignAndLineColumns()
 endfunction
 
 nnoremap <C-l> :call ToggleSignAndLineColumns()<CR>
-"-------------------------------------------
+" -------------------------------------------
+
+" --------- Switch windows ------------------
+nnoremap <leader>w <ESC><C-w>W
+" -------------------------------------------

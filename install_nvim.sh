@@ -9,7 +9,7 @@ fi
 
 # Install packages
 $SUDO apt update
-$SUDO apt-get install -y curl git
+$SUDO apt-get install -y curl git xclip
 
 # install ripgrep
 ripgrep_version="13.0.0"
@@ -51,5 +51,12 @@ if [[ ! -f $conf_dir ]]; then
 fi
 cp -r nvim/ $conf_dir
 
+# download font for devicons
+fonts_dir="${XDG_DATA_HOME:-$HOME/.local/share/fonts/}"
+mkdir -p $fonts_dir
+curl -fLo "${fonts_dir}Fira.ttf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Light/complete/Fira%20Code%20Light%20Nerd%20Font%20Complete%20Mono.ttf
+
+
+# VIM setups
 vim --headless +'PlugInstall' +qall
 vim --headless +'CocInstall -sync coc-json coc-sh coc-yaml' +qall
