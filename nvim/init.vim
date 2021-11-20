@@ -19,7 +19,19 @@ Plug 'bryanmylee/vim-colorscheme-icons'  " devicons colors
 Plug 'nvim-lua/popup.nvim'
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
-Plug 'nvim-telescope/telescope-fzy-native.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'fannheyward/telescope-coc.nvim'
+
+
+" FOR THE FUTURE
+" TreeSitter (needs nightly build or 0.6.0, left it here for future
+" looks interesting, but I didn't try
+" Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+"
+" Debug Prints with context
+" https://github.com/polarmutex/contextprint.nvim
+"
+"
 
 call plug#end()
 

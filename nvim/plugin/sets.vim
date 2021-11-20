@@ -21,6 +21,7 @@ set updatetime=100
 " ------------ Mouse support ----------------
 set mouse=a
 " -------------------------------------------
+"
 " ------------ Clipboard support ------------
 " xclip must be installed!
 " standard yank will copy selected to clipboard
