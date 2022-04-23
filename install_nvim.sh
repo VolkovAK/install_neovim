@@ -9,14 +9,24 @@ fi
 
 # Install packages
 $SUDO apt update
-$SUDO apt-get install -y curl git xclip
+$SUDO apt-get install -y curl git xclip make gcc
 
-# CHECK FOR ripgrep !!!!!!!!!!!!!!!!!!
 # install ripgrep
-ripgrep_version="13.0.0"
-curl -LO https://github.com/BurntSushi/ripgrep/releases/download/${ripgrep_version}/ripgrep_${ripgrep_version}_amd64.deb
-$SUDO dpkg -i ripgrep_${ripgrep_version}_amd64.deb
-rm ripgrep_${ripgrep_version}_amd64.deb 
+if ! command -v rg &> /dev/null ; then
+    ripgrep_version="13.0.0"
+    curl -LO https://github.com/BurntSushi/ripgrep/releases/download/${ripgrep_version}/ripgrep_${ripgrep_version}_amd64.deb
+    $SUDO dpkg -i ripgrep_${ripgrep_version}_amd64.deb
+    rm ripgrep_${ripgrep_version}_amd64.deb 
+fi
+
+# install fd
+if ! command -v fd &> /dev/null ; then
+    fd_version="8.3.2"
+    curl -LO https://github.com/sharkdp/fd/releases/download/v${fd_version}/fd_${fd_version}_amd64.deb
+    $SUDO dpkg -i fd_${fd_version}_amd64.deb
+    rm fd_${fd_version}_amd64.deb 
+fi
+
 
 # Install neovim
 curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage
@@ -24,7 +34,6 @@ chmod u+x nvim.appimage
 ./nvim.appimage --appimage-extract
 $SUDO mv squashfs-root/ /opt/nvim
 rm nvim.appimage
-
 
 # Check is default vim is installed 
 if [[ -f "/usr/bin/vim" ]]; then
@@ -41,27 +50,37 @@ $SUDO ln -s /opt/nvim/AppRun /usr/bin/vim
 sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
-# CHECK FOR NODE !!!!!!!!!!!!!!!!!!!
 # install node.js for LSP
-curl -L  install-node.now.sh/lts -o install_node.sh
-$SUDO bash install_node.sh -y
-rm install_node.sh
-
-# copy configs to .config
-conf_dir="${XDG_DATA_HOME:-$HOME/.config/}"
-if [[ ! -f $conf_dir ]]; then
-    mkdir -p $conf_dir
+if ! command -v node &> /dev/null ; then
+    echo Installing node...
+    curl -L  install-node.now.sh/lts -o install_node.sh
+    $SUDO bash install_node.sh -y
+    rm install_node.sh
 fi
-cp -r nvim/ $conf_dir
 
 # download font for devicons
+echo Installing fonts...
 fonts_dir="${XDG_DATA_HOME:-$HOME/.local/share/fonts/}"
 mkdir -p $fonts_dir
 curl -fLo "${fonts_dir}Fira.ttf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Light/complete/Fira%20Code%20Light%20Nerd%20Font%20Complete%20Mono.ttf
 
+# copy configs to .config
+conf_dir="${XDG_DATA_HOME:-$HOME/.config/}"
+if [[ ! -f $conf_dir ]]; then
+    mkdir -p $conf_dir/nvim/
+fi
+cp nvim/init.vim $conf_dir/nvim/
 
 # VIM setups
 vim --headless +'PlugInstall' +qall
+cp -r nvim/plugin $conf_dir/nvim/
+
+
+# make copy/paste work over ssh
+echo "add ForwardX11 in ssh config for copy/paste"
+mkdir -p $HOME/.ssh
+echo "ForwardX11 yes" >> $HOME/.ssh/config
+
 # COC UNINSTALL!!
-vim --headless +'CocInstall -sync coc-json coc-sh coc-yaml' +qall
+# vim --headless +'CocInstall -sync coc-json coc-sh coc-yaml' +qall
 # ADD COC-PYRIGHT

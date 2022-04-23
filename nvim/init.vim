@@ -36,6 +36,9 @@ Plug 'fannheyward/telescope-coc.nvim'
 call plug#end()
 
 let g:gruvbox_italic = 1
-colorscheme gruvbox
+try
+    colorscheme gruvbox
+catch
+endtry
 let mapleader = " "
 
