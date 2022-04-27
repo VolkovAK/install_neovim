@@ -72,15 +72,44 @@ fi
 cp nvim/init.vim $conf_dir/nvim/
 
 # VIM setups
+echo "Installing plugins and Coc basic plugins"
 vim --headless +'PlugInstall' +qall
-cp -r nvim/plugin $conf_dir/nvim/
+vim --headless +'CocInstall -sync coc-json coc-sh coc-yaml' +qall
 
 
 # make copy/paste work over ssh
-echo "add ForwardX11 in ssh config for copy/paste"
-mkdir -p $HOME/.ssh
-echo "ForwardX11 yes" >> $HOME/.ssh/config
+read -p "Do you want use vim buffer over ssh? [Y/n]" -n 1 -r
+echo    
+if [[ ! $REPLY =~ ^[Nn]$ ]]
+then
+    echo "add ForwardX11 in ssh config for copy/paste"
+    mkdir -p $HOME/.ssh
+    echo "ForwardX11 yes" >> $HOME/.ssh/config
+fi
 
-# COC UNINSTALL!!
-# vim --headless +'CocInstall -sync coc-json coc-sh coc-yaml' +qall
-# ADD COC-PYRIGHT
+
+read -p "Do you want install Pyright? (for python) [Y/n]" -n 1 -r
+echo    
+if [[ ! $REPLY =~ ^[Nn]$ ]]
+then
+    echo "Installing Pyright"
+    vim --headless +'CocInstall -sync coc-pyright' +qall
+fi
+
+read -p "Do you want install clangd? (for C++) [Y/n]" -n 1 -r
+echo    
+if [[ ! $REPLY =~ ^[Nn]$ ]]
+then
+    echo "Installing coc-clangd"
+    vim --headless +'CocInstall -sync coc-clangd coc-cmake' +qall
+    
+    echo "Installing clangd"
+    echo "." > /tmp/cpp_temp.cpp
+    vim /tmp/cpp_temp.cpp --headless +'CocCommand clangd.install'&   # DOES NOT WORK IN DOCKER
+    pid=$!
+    sleep 20
+    rm /tmp/cpp_temp.cpp
+    kill -9 $pid
+fi
+
+cp -r nvim/plugin $conf_dir/nvim/

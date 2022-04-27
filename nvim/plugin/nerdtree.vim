@@ -4,9 +4,9 @@ let s:filescount = str2float(system('ls -f | wc -l'))
 autocmd StdinReadPre * let s:std_in=1
 if s:filescount < s:MAX_FILES
     if argc() > 0
-        " move nerd_root to location of selected file, not current dir
+        " move nerd_root to location of selected file
         let s:nerd_root = fnamemodify(argv()[0], ':p:h')
-        autocmd VimEnter * | execute 'NERDTree' s:nerd_root | wincmd p | if isdirectory(argv()[0]) | enew | execute 'cd '.argv()[0] | endif
+        autocmd VimEnter * NERDTree | wincmd p | if isdirectory(argv()[0]) | enew | endif | execute 'cd '.s:nerd_root | execute 'NERDTreeCWD' | wincmd p
     else
         autocmd VimEnter * NERDTree | wincmd p 
     endif
