@@ -21,7 +21,7 @@ set updatetime=100
 " ------------ Mouse support ----------------
 set mouse=a
 " -------------------------------------------
-"
+
 " ------------ Clipboard support ------------
 " xclip must be installed!
 " standard yank will copy selected to clipboard
@@ -63,4 +63,27 @@ nnoremap <C-l> :call ToggleSignAndLineColumns()<CR>
 
 " --------- Switch windows ------------------
 nnoremap <leader>w <ESC><C-w>W
+" -------------------------------------------
+
+" --------- Terminal ------------------------
+function! TerminalOptions()
+    " /* folded code */
+    set signcolumn=no
+    set nornu
+    set nu
+    startinsert!
+endfunction
+autocmd TermOpen * call TerminalOptions()
+
+function! StartTerminal()
+    split
+    wincmd j
+    resize 10
+    terminal
+    echom ""
+endfunction
+nnoremap <leader>t :call StartTerminal()<CR>
+
+
+tnoremap <Esc><Esc> <C-\><C-n>
 " -------------------------------------------
