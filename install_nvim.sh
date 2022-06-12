@@ -58,11 +58,15 @@ if ! command -v node &> /dev/null ; then
     rm install_node.sh
 fi
 
+# snap install gh? ????????????????????????????????????
+
 # download font for devicons
 echo Installing fonts...
 fonts_dir="${XDG_DATA_HOME:-$HOME/.local/share/fonts/}"
 mkdir -p $fonts_dir
+# Rethink links https://www.youtube.com/watch?v=fR4ThXzhQYI&list=PLhoH5vyxr6Qq41NFL4GvhFp-WLd5xzIzZ&index=7
 curl -fLo "${fonts_dir}Fira.ttf" https://github.com/ryanoasis/nerd-fonts/raw/master/patched-fonts/FiraCode/Light/complete/Fira%20Code%20Light%20Nerd%20Font%20Complete%20Mono.ttf
+curl -fLo "${fonts_dir}codicons.ttf" https://github.com/microsoft/vscode-codicons/raw/main/dist/codicon.ttf
 
 # copy configs to .config
 conf_dir="${XDG_DATA_HOME:-$HOME/.config/}"
